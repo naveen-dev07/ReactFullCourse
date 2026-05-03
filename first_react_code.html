@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>React Basics</title>
+</head>
+<body>
+  <!-- The container where our React application will be rendered -->
+  <div class="js-container"></div>
+
+  <!-- Note: Loading an external utility library -->
+  <script src="https://unpkg.com/supersimpledev@3.2.1/external-library.js"></script>
+
+  <!-- Note: Loading the core React library -->
+  <script src="https://unpkg.com"></script>
+  <!-- Note: Loading ReactDOM to manage the DOM specifically for web -->
+  <script src="https://unpkg.com"></script>
+
+  <!-- Note: Babel is required to transform JSX and modern JS into browser-readable code -->
+  <script src="https://unpkg.com"></script>
+
+  <script type="text/babel">
+    // 1. Select the HTML element where the app will live
+    const container = document.querySelector('.js-container'); //calling the above container for edit with react
+
+    // 2. Create a React root and render a simple message into the container
+    // This uses the modern React 18 createRoot API
+    ReactDOM.createRoot(container).render('Welcome to SuperSimpleDev React Course'); // render() works like console.log()  for showing somthing on screen
+  </script>
+</body>
+</html>
