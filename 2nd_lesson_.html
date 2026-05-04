@@ -1,0 +1,67 @@
+import React from 'react';
+
+/**
+ * THEORY: THE CHILD COMPONENT (REUSABLE TEMPLATE)
+ * 1. Components are like blueprints. This 'ProductCard' doesn't know 
+ *    the data yet; it just knows WHERE to put it.
+ * 2. 'props' is the bridge. It's an object that holds everything 
+ *    sent by the Parent.
+ */
+function ProductCard(props) {
+  // LOGIC: We extract values from the props object
+  // Theory: Props are READ-ONLY. We cannot do 'props.price = 0' here.
+  return (
+    <div style={{ border: '1px solid #444', margin: '10px', padding: '15px' }}>
+      {/* 
+          THEORY: JSX EXPRESSIONS 
+          Curly braces {} tell React: "Stop reading this as HTML and 
+          start reading it as JavaScript variable/logic."
+      */}
+      <h3>Product: {props.name}</h3>
+      <p>Price: ${props.price}</p>
+      <p>Category: {props.category}</p>
+    </div>
+  );
+}
+
+/**
+ * THEORY: THE PARENT COMPONENT (THE DATA SOURCE)
+ * 1. The Parent is responsible for "State" and "Data".
+ * 2. It controls the Child by passing different 'attributes'.
+ */
+export default function App() {
+  return (
+    <div style={{ fontFamily: 'Arial' }}>
+      <h1>My Tech Store</h1>
+      <hr />
+
+      {/* 
+          THEORY: PASSING PROPS (DATA FLOW)
+          - Data flows UNIDIRECTIONALLY (Top to Bottom).
+          - Each 'ProductCard' is an INSTANCE of the component.
+          - We pass strings inside " " and numbers/variables inside { }.
+      */}
+
+      {/* Instance 1: Passing specific data for a Laptop */}
+      <ProductCard 
+        name="MacBook Pro" 
+        price={1999} 
+        category="Electronics" 
+      />
+
+      {/* Instance 2: Reusing the same component for a different product */}
+      <ProductCard 
+        name="Mechanical Keyboard" 
+        price={150} 
+        category="Accessories" 
+      />
+
+      {/* Instance 3: Demonstrating that props are dynamic */}
+      <ProductCard 
+        name="Gaming Mouse" 
+        price={80} 
+        category="Accessories" 
+      />
+    </div>
+  );
+}
