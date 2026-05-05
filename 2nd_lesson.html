@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Bot</title>
+</head>
+
+<body>
+    <!-- 
+        1. THE ROOT CONTAINER:
+        This is the target DOM element where React will "inject" your application. 
+        React needs a real HTML element to start rendering the Virtual DOM.
+    -->
+    <div class="js-contsiner"></div>
+
+    <!-- 
+        2. REACT & BABEL CDNs:
+        - react.js: The core library for managing components and state.
+        - react-dom.js: The glue between React and the browser's DOM.
+        - babel.js: A transpiler that converts JSX (HTML-like syntax) into standard JavaScript 
+          that browsers can understand.
+    -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <!-- type="text/babel" tells Babel to process the code inside this script tag -->
+    <script type="text/babel">
+
+        /**
+         * CONCEPT: FUNCTIONAL COMPONENT
+         * A Component is a reusable piece of UI. 
+         * Rule: Always start component names with a Capital Letter.
+         */
+        function ChatInput() {
+            return (
+                <div>
+                    {/* placeholder was misspelled as placeholer previously */}
+                    <input placeholder="Send a message to chatbot" size="30" />
+                    <button>Send</button>
+                </div>
+            );
+        }
+
+        /**
+         * CONCEPT: PROPS & DESTRUCTURING
+         * Components accept inputs called "Props" (short for properties).
+         * Instead of using 'props.message', we use { message, sender } 
+         * to extract values directly. This is called "Object Destructuring".
+         */
+        function ChatMessage({message , sender}) { 
+            return (
+                <div>
+                    {/* 
+                        CONCEPT: CONDITIONAL RENDERING (Logical &&)
+                        The code after '&&' only runs if the condition before it is true.
+                        If sender is "robot", show the robot image.
+                    */}
+                    {sender === "robot" && <img src="robot.png" width="50" alt="bot" />}
+                    
+                    {/* Rendering the dynamic message passed via props */}
+                    {message}
+
+                    {/* If sender is "user", show the user image icon */}
+                    {sender === "user" && <img src="user-icon.png" width="50" alt="user" />}
+                </div>
+            );
+        }
+
+        /**
+         * CONCEPT: FRAGMENTS (<> ... </>)
+         * React components must return a single parent element. 
+         * Fragments allow you to group multiple elements without adding extra <div>s to the DOM.
+         */
+        const app = (
+            <>
+                <ChatInput />
+                {/* 
+                    Passing data from Parent (app) to Child (ChatMessage) via attributes.
+                    These attributes become the 'props' object.
+                */}
+                <ChatMessage message="hello chatbot" sender="user" />
+                <ChatMessage message="Hello! How can i help you " sender="robot" />
+                <ChatMessage message="can you get me todays date" sender="user" />
+                <ChatMessage message="today is September 27" sender="robot" />
+            </>
+        );
+
+        /**
+         * CONCEPT: RENDERING TO DOM
+         * 1. Select the target HTML element.
+         * 2. Create a React Root.
+         * 3. Render the JSX 'app' variable into that root.
+         */
+        const container = document.querySelector(".js-contsiner");
+        ReactDOM.createRoot(container).render(app);
+        
+    </script>
+</body>
+
+</html>
