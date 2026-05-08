@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lumi Chat Bot</title>
+</head>
+<body>
+    <div class="js-container"></div>
+
+    <!-- React & Babel CDNs -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <script type="text/babel">
+
+        // NOTE 1: Components must receive props inside curly braces { } to "destructure" them.
+        function ChatInput({ chatMessages, setChatMessages }) {
+            const [inputText, setInputText] = React.useState("");
+
+            function saveInputText(event) {
+                // NOTE 2: event.target.value grabs exactly what the user typed in the box.
+                setInputText(event.target.value);
+            }
+
+            function sendMessage() {
+                // NOTE 3: Use the spread operator (...) to copy the existing messages array
+                // and append the new message object at the end.
+                setChatMessages([
+                    ...chatMessages,
+                    {
+                        message: inputText, // Uses the state variable from NOTE 2
+                        sender: "user",
+                        id: crypto.randomUUID() // Generates a unique ID for the 'key' prop
+                    }
+                ]);
+                setInputText(""); // Clears the input box after clicking send
+            }
+
+            return (
+                <>
+                    <input 
+                        placeholder="Send a message to chatbot" 
+                        size="30" 
+                        value={inputText} // Makes this a "Controlled Component"
+                        onChange={saveInputText} 
+                    />
+                    {/* NOTE 4: IMPORTANT! Pass the function name 'sendMessage', 
+                        do NOT use 'sendMessage()' or it will run as soon as the page loads. */}
+                    <button onClick={sendMessage}>Send</button>
+                </>
+            );
+        }
+
+        function ChatMessage({ message, sender }) {
+            return (
+                <div style={{ marginBottom: "10px" }}>
+                    {sender === "robot" && <b>Robot: </b>}
+                    {sender === "user" && <b>You: </b>}
+                    {message}
+                </div>
+            );
+        }
+
+        // NOTE 5: This is a "Presentational Component". It takes the array and maps through it.
+        function ChatMessagesList({ chatMessages }) {
+            return (
+                <>
+                    {chatMessages.map((chat) => (
+                        <ChatMessage
+                            key={chat.id} // NOTE 6: Always provide a unique 'key' for list items
+                            message={chat.message}
+                            sender={chat.sender}
+                        />
+                    ))}
+                </>
+            );
+        }
+
+        function App() {
+            // NOTE 7: STATE LIFTING. We keep the list here so both 
+            // the Input and the List components can use it.
+            const [chatMessages, setChatMessages] = React.useState([
+                { message: "hello chatbot", sender: "user", id: "id1" },
+                { message: "Hello! How can I help you!", sender: "robot", id: "id2" }
+            ]);
+
+            return (
+                <>
+                    <h1>Lumi Chat</h1>
+                    {/* NOTE 8: Passing the state and the updater function as PROPS */}
+                    <ChatMessagesList chatMessages={chatMessages} />
+                    <hr />
+                    <ChatInput 
+                        chatMessages={chatMessages} 
+                        setChatMessages={setChatMessages} 
+                    />
+                </>
+            );
+        }
+
+        const container = document.querySelector(".js-container");
+        ReactDOM.createRoot(container).render(<App />);
+    </script>
+</body>
+</html>
